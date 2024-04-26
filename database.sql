@@ -6,7 +6,11 @@ CREATE TABLE Users (
     UName VARCHAR(255) NOT NULL,
     UPassword VARCHAR(255),
     UAccount VARCHAR(255),
+    UNickname VARCHAR(255),
     NoticeTime TIME
+    isrightHander BOOLEAN
+    isDarkMode BOOLEAN
+    Budget int 
 );
 
 CREATE TABLE Ledgers (
