@@ -3,7 +3,7 @@ Create Schema Money;
 USE Money;
 CREATE TABLE Users (
 	UID INT AUTO_INCREMENT PRIMARY KEY,
-    UName VARCHAR(255) NOT NULL,
+    UName VARCHAR(255) NOT NULL, 
     UPassword VARCHAR(255),
     UAccount VARCHAR(255),
     UNickname VARCHAR(255),
