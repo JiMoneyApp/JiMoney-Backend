@@ -301,6 +301,21 @@ def update_user_name():
     cursor.close()
     return "Update successfully!"
 
+
+@user.route('/user/insert_user_acc_password',methods=['PUT', 'POST'])
+def insert_user_acc_password():
+    
+    user_name = request.args.get('user_name')
+    user_acc = request.args.get('user_acc')
+    user_password = request.args.get('user_password')
+    cursor = db.connection.cursor()
+    cursor.execute(
+        f"""INSERT INTO users (`Uname`, `Uaccount`, `Upassword`)
+            VALUES ('{user_name}', '{user_acc}', '{user_password}');"""
+    )
+    db.connection.commit()
+    return "insert successfully!"
+
 if __name__ == '__main__':
     user.run(debug=True)
 
