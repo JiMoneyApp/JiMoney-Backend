@@ -301,11 +301,6 @@ def update_user_name():
     cursor.close()
     return "Update successfully!"
 
-
-    
-
-
-
 if __name__ == '__main__':
     user.run(debug=True)
 
