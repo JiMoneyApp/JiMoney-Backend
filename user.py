@@ -296,7 +296,7 @@ def check_account(user_acc):
             WHERE UAccount = '{user_acc}';
         """
     )
-    result = cursor.fetchone()
+    result = cursor.fetchall()
     cursor.close()
     if len(result) == 0: #if != 0 means account already exist return true
         return False
