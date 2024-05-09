@@ -13,10 +13,11 @@ from database import db
 
 
 
+
 user = Blueprint("user",__name__)
 
 
-#ok
+
 @user.route('/get_name',methods=['GET', 'POST'])
 def get_user_name():
     user_id = request.args.get('user_id')
