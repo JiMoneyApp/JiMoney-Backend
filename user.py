@@ -286,7 +286,21 @@ def update_user_budget():
     return "Update successfully!"
 
 
+def check_account(user_acc):
 
+    cursor = db.connection.cursor()
+    cursor.execute(
+        f"""
+            SELECT count(*)
+            FROM users 
+            WHERE UAccount = '{user_acc}';
+        """
+    )
+    result = cursor.fetchone()
+    cursor.close()
+    if len(result) == 0: #if != 0 means account already exist return true
+        return False
+    else: return True 
 
 @user.route('/insert_acc_password',methods=['GET','POST'])
 def insert_user_acc_password():
@@ -294,6 +308,10 @@ def insert_user_acc_password():
     user_name = request.args.get('user_name')
     user_acc = request.args.get('user_acc')
     user_password = request.args.get('user_password')
+
+    if check_account(user_acc):
+        return "account already exist!"
+    
     cursor = db.connection.cursor()
     cursor.execute(
         f"""INSERT INTO users (`Uname`, `Uaccount`, `Upassword`)
