@@ -74,7 +74,7 @@ def insert_new_data():
         )
         cursor.execute("COMMIT")
         cursor.close()
-        return "Insert successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -93,7 +93,7 @@ def update_data_name():
             """
         )
         cursor.execute("COMMIT")
-        return "Update data name successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -136,7 +136,7 @@ def update_data_price():
         )
         cursor.execute("COMMIT")
         cursor.close()
-        return "Update data price successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -155,7 +155,7 @@ def update_data_type():
             """
         )
         cursor.execute("COMMIT")
-        return "Update data type successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -174,7 +174,7 @@ def update_data_date():
             """
         )
         cursor.execute("COMMIT")
-        return "Update data date successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -191,7 +191,7 @@ def delete_data():
             """
         )
         cursor.execute("COMMIT")
-        return "Delete data successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")

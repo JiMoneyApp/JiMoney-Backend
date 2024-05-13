@@ -33,7 +33,7 @@ def insert_ledger():
     ledger_name = request.args.get("ledger_name")
     cursor = db.connection.cursor()
     if check_ledger_name(user_id, ledger_name):
-        return "Ledger name already exists"
+        return False
     try:
         cursor.execute(
             f"""
@@ -43,7 +43,7 @@ def insert_ledger():
         )
         db.connection.commit()
         cursor.close()
-        return "Ledger inserted successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -64,7 +64,7 @@ def delete_ledger():
         )
         db.connection.commit()
         cursor.close()
-        return "Ledger deleted successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -76,7 +76,7 @@ def update_ledger():
     old_ledger_name = request.args.get("old_ledger_name")
     new_ledger_name = request.args.get("new_ledger_name")
     if check_ledger_name(user_id, new_ledger_name):
-        return "Ledger name already exists"
+        return False
     cursor = db.connection.cursor()
     try:
         cursor.execute(
@@ -89,7 +89,7 @@ def update_ledger():
         )
         db.connection.commit()
         cursor.close()
-        return "Ledger updated successfully"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()

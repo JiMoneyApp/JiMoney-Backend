@@ -221,7 +221,7 @@ def update_user_name():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -243,7 +243,7 @@ def update_user_password():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -265,7 +265,7 @@ def update_user_acc():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -287,7 +287,7 @@ def update_user_nname():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -310,7 +310,7 @@ def update_user_ntime():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -333,7 +333,7 @@ def update_user_isright():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -355,7 +355,7 @@ def update_user_isdark():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -378,7 +378,7 @@ def update_user_budget():
         )
         db.connection.commit()
         cursor.close()
-        return "Update successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -397,7 +397,6 @@ def check_account(user_acc):
             """
         )
         result = cursor.fetchone()
-        print(result)
         cursor.close()
         if result[0] == 0: #if != 0 means account already exist return true
             return False
@@ -416,7 +415,7 @@ def insert_user_acc_password():
     user_password = request.args.get('user_password')
 
     if check_account(user_acc):
-        return "account already exist!"
+        return False
     
     cursor = db.connection.cursor()
     try:
@@ -425,7 +424,7 @@ def insert_user_acc_password():
                 VALUES ('{user_name}', '{user_acc}', '{user_password}');"""
         )
         db.connection.commit()
-        return "insert successfully!"
+        return True
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
