@@ -23,7 +23,7 @@ def get_user_id():
         cursor.execute(
             f"""
                 SELECT UID
-                FROM users 
+                FROM Users 
                 WHERE UAccount = '{user_acc}' AND UPassword = '{user_password}';
             """
         )
@@ -44,7 +44,7 @@ def get_user_name():
         cursor.execute(
             f"""
                 SELECT UName
-                FROM users 
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -65,8 +65,8 @@ def get_is_right():
     try:
         cursor.execute(
             f"""
-                SELECT isRightHander
-                FROM users 
+                SELECT isrightHander
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -87,7 +87,7 @@ def get_is_dark():
         cursor.execute(
             f"""
                 SELECT isDarkMode
-                FROM users 
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -108,7 +108,7 @@ def get_ntime():
         cursor.execute(
             f"""
                 SELECT NoticeTime
-                FROM users 
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -129,7 +129,7 @@ def get_user_acc():
         cursor.execute(
             f"""
                 SELECT UAccount
-                FROM users 
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -150,7 +150,7 @@ def get_user_password():
         cursor.execute(
             f"""
                 SELECT UPassword
-                FROM users 
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -170,8 +170,8 @@ def get_budget():
     try:
         cursor.execute(
             f"""
-                SELECT Budget
-                FROM users 
+                SELECT BUDGET
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -192,7 +192,7 @@ def get_user_nname():
         cursor.execute(
             f"""
                 SELECT UNickname
-                FROM users 
+                FROM Users 
                 WHERE UID = {user_id};
             """
         )
@@ -214,14 +214,14 @@ def update_user_name():
     try:
         cursor.execute(
             f"""
-                update users
-                set UName = '{new_name}'
+                UPDATE Users
+                SET UName = '{new_name}'
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -236,14 +236,14 @@ def update_user_password():
     try:
         cursor.execute(
             f"""
-                update users
-                set UPassword = {new_password}
+                UPDATE Users
+                SET UPassword = {new_password}
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -258,14 +258,14 @@ def update_user_acc():
     try:
         cursor.execute(
             f"""
-                update users
-                set Uaccount = {new_acc}
+                UPDATE Users
+                SET UAccount = {new_acc}
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -280,14 +280,14 @@ def update_user_nname():
     try:
         cursor.execute(
             f"""
-                update users
-                set Unickname = '{new_nname}'
+                UPDATE Users
+                SET UNickname = '{new_nname}'
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -303,14 +303,14 @@ def update_user_ntime():
     try:
         cursor.execute(
             f"""
-                update users
-                set Noticetime = {new_ntime}
+                UPDATE Users
+                SET NoticeTime = {new_ntime}
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -326,14 +326,14 @@ def update_user_isright():
     try:
         cursor.execute(
             f"""
-                update users
-                set isrighthander = {new_isright}
+                UPDATE Users
+                SET isrightHander = {new_isright}
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -348,14 +348,14 @@ def update_user_isdark():
     try:
         cursor.execute(
             f"""
-                update users
-                set isdarkmode = {new_isdark}
+                UPDATE Users
+                SET isDarkMode = {new_isdark}
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -371,14 +371,14 @@ def update_user_budget():
     try:
         cursor.execute(
             f"""
-                update users
-                set budget = {new_budget}
+                UPDATE Users
+                SET BUDGET = {new_budget}
                 WHERE UID = {user_id};
             """
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -391,8 +391,8 @@ def check_account(user_acc):
     try:
         cursor.execute(
             f"""
-                SELECT count(*)
-                FROM users 
+                SELECT COUNT(*)
+                FROM Users 
                 WHERE UAccount = '{user_acc}';
             """
         )
@@ -413,18 +413,21 @@ def insert_user_acc_password():
     user_name = request.args.get('user_name')
     user_acc = request.args.get('user_acc')
     user_password = request.args.get('user_password')
-
+    print(user_name)
     if check_account(user_acc):
-        return False
-    
+        return 'account already exist!'
+    print("{}, {}, {}".format(user_name, user_acc, user_password))
     cursor = db.connection.cursor()
     try:
+        #print("YESY")
         cursor.execute(
-            f"""INSERT INTO users (`Uname`, `Uaccount`, `Upassword`)
-                VALUES ('{user_name}', '{user_acc}', '{user_password}');"""
+            f"""
+                INSERT INTO Users (UName, UAccount, UPassword) VALUES ('{user_name}', '{user_acc}', '{user_password}');
+            """
         )
+        #print("NO")
         db.connection.commit()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
