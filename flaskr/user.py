@@ -113,9 +113,11 @@ def get_ntime():
             """
         )
         result = cursor.fetchone()
-        cursor.close()
-        return jsonify(result)
-    except:
+        notice_time = result[0]
+        notice_time_str = str(notice_time)
+        return jsonify(notice_time_str)
+    except Exception as e:
+        print(e)
         cursor.execute("ROLLBACK")
         cursor.close()
         abort(500, "ERROR 500")
@@ -413,10 +415,11 @@ def insert_user_acc_password():
     user_name = request.args.get('user_name')
     user_acc = request.args.get('user_acc')
     user_password = request.args.get('user_password')
+    #user_nickname = request.args.get('user_nickname')
     print(user_name)
     if check_account(user_acc):
         return 'account already exist!'
-    print("{}, {}, {}".format(user_name, user_acc, user_password))
+    #print("{}, {}, {}".format(user_name, user_acc, user_password))
     cursor = db.connection.cursor()
     try:
         #print("YESY")
