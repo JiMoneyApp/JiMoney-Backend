@@ -1,23 +1,34 @@
 DROP SCHEMA IF EXISTS Money;
 Create Schema Money;
 USE Money;
-CREATE TABLE Users (
+
+CREATE TABLE Users_log_info (
 	UID INT AUTO_INCREMENT PRIMARY KEY,
-    UName VARCHAR(255) NOT NULL, 
     UPassword VARCHAR(255),
-    UAccount VARCHAR(255),
+    UserName VARCHAR(255),
+);
+
+CREATE TABLE Users_profile (
     UNickname VARCHAR(255),
     NoticeTime TIME
     isrightHander BOOLEAN
     isDarkMode BOOLEAN
-    Budget int 
+    FOREIGN KEY (UID) REFERENCES Users_log_info(UID)
+);
+
+CREATE TABLE Users_wallet (
+    WID INT AUTO_INCREMENT PRIMARY KEY,
+    WName VARCHAR(255) DEFAULT NULL,
+    WBugdet INT,
+    WSum INT,
+    FOREIGN KEY (UID) REFERENCES Users_log_info(UID)
 );
 
 CREATE TABLE Ledgers (
     LID INT AUTO_INCREMENT PRIMARY KEY,
     LName VARCHAR(255) DEFAULT NULL,
     UID INT,
-    FOREIGN KEY (UID) REFERENCES Users(UID)
+    FOREIGN KEY (UID) REFERENCES Users_log_info(UID)
 );
 
 CREATE TABLE Datas (
@@ -29,5 +40,5 @@ CREATE TABLE Datas (
     LID INT,
     UID INT,
     FOREIGN KEY (LID) REFERENCES Ledgers(LID),
-    FOREIGN KEY (UID) REFERENCES Users(UID)
+    FOREIGN KEY (UID) REFERENCES Users_log_info(UID)
 );
