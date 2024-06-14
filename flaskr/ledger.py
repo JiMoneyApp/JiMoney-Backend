@@ -46,6 +46,27 @@ def get_ledgers_name():
         cursor.close()
         abort(500, "ERROR 500")
 
+@ledger.route("/get_ledgers_sum", methods=["GET"])
+def get_ledgers_sum():
+    user_id = request.args.get("user_id")
+    ledger_name = request.args.get("ledger_name")
+    cursor = db.connection.cursor()
+    try:
+        cursor.execute(
+            f"""
+                SELECT LedgerSum
+                FROM Ledgers
+                WHERE UID = {user_id} AND LName = '{ledger_name}';
+            """
+        )
+        result = cursor.fetchall()
+        cursor.close()
+        return jsonify(result)
+    except:
+        cursor.execute("ROLLBACK")
+        cursor.close()
+        abort(500, "ERROR 500")
+
 
 @ledger.route("/insert_ledger", methods=[ "GET", "PUT"])
 def insert_ledger():
