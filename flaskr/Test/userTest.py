@@ -43,110 +43,110 @@ class ApiUsersTestCase(unittest.TestCase):
         data = response.json()
         self.assertEqual(data, "root")
         self.assertEqual(response.status_code, 200)
-        
+
     def test_get_is_right(self):
-        suffix = '/user/get_isright?user_id=1'
+        suffix = '/user/get_isright?user_id=0'
         response = requests.get(self.base_url + suffix)
         data = response.json()
-        self.assertEqual(response.status_code, True)
+        self.assertEqual(data, True)
+        self.assertEqual(response.status_code, 200)
 
     def test_get_is_dark(self):
-        suffix = '/user/get_isdark?user_id=1'
+        suffix = '/user/get_isdark?user_id=0'
         response = requests.get(self.base_url + suffix)
         data = response.json()
         self.assertEqual(data, False)
         self.assertEqual(response.status_code, 200)
 
     def test_get_notice_time(self):
-        suffix = '/user/get_ntime?user_id=1'
+        suffix = '/user/get_ntime?user_id=0'
         response = requests.get(self.base_url + suffix)
         data = response.json()
         self.assertEqual(data, "21:00:00")
         self.assertEqual(response.status_code, 200)
 
     def test_get_user_acc(self):
-        suffix = '/user/get_acc?user_id=5'
+        suffix = '/user/get_acc?user_id=0'
         response = requests.get(self.base_url + suffix)
         data = response.json()
         self.assertEqual(data, "root")
         self.assertEqual(response.status_code, 200)
 
     def test_get_user_password(self):
-        suffix = '/user/get_password?user_id=5'
+        suffix = '/user/get_password?user_id=0'
         response = requests.get(self.base_url + suffix)
         data = response.json()
         self.assertEqual(data, "root1234")
         self.assertEqual(response.status_code, 200)
 
     def test_get_budget(self):
-        suffix = '/user/get_budget?user_id=1'
+        suffix = '/user/get_budget?user_id=0'
         response = requests.get(self.base_url + suffix)
         data = response.json()
         self.assertEqual(data, 100)
         self.assertEqual(response.status_code, 200)
 
     def test_get_user_nickname(self):
-        suffix = '/user/get_nname?user_id=1'
+        suffix = '/user/get_nname?user_id=0'
         response = requests.get(self.base_url + suffix)
         data = response.json()
         self.assertEqual(response.status_code, 200)
 
     def test_update_user_name(self):
-        suffix = '/user/update_name?user_id=1&new_name=Root'
+        suffix = '/user/update_name?user_id=0&new_name=root_new'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
 
     def test_update_user_password(self):
-        suffix = '/user/update_password?user_id=1&new_password=1234'
+        suffix = '/user/update_password?user_id=0&new_password=1234'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
 
     def test_update_user_acc(self):
-        suffix = '/user/update_acc?user_id=1&new_acc=1234'
+        suffix = '/user/update_acc?user_id=0&new_acc=1234'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
 
     def test_update_user_nickname(self):
-        suffix = '/user/update_nname?user_id=1&new_nname=newadmin'
+        suffix = '/user/update_nname?user_id=0&new_nname=newadmin'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
 
     def test_update_notice_time(self):
-        suffix = '/user/update_ntime?user_id=1&new_ntime=090000'
+        suffix = '/user/update_ntime?user_id=0&new_ntime=090000'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
 
     def test_update_is_right(self):
-        suffix = '/user/update_isright?user_id=1&new_isright=False'
+        suffix = '/user/update_isright?user_id=0&new_isright=False'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
 
     def test_update_is_dark(self):
-        suffix = '/user/update_isdark?user_id=1&new_isdark=True'
+        suffix = '/user/update_isdark?user_id=0&new_isdark=True'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
 
     def test_update_budget(self):
-        suffix = '/user/update_budget?user_id=1&new_budget=2000'
+        suffix = '/user/update_budget?user_id=0&new_budget=2000'
         response = requests.get(self.base_url + suffix)
-        data = response.json()
+        data = response.text
         self.assertEqual(data, 'success!')
         self.assertEqual(response.status_code, 200)
-    
     
 
 if __name__ == '__main__':
