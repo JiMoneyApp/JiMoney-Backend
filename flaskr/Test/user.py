@@ -107,7 +107,7 @@ def update_user_name():
     user_id = request.args.get('user_id')
     new_name = request.args.get('new_name')
     
-    success = users_table.update(
+    success = user_table.update(
         {'UName': new_isright}, 
         Query().UID == int(user_id)
     )
@@ -123,7 +123,7 @@ def update_user_password():
     user_id = request.args.get('user_id')
     new_password = request.args.get('new_password')
 
-    success = users_table.update(
+    success = user_table.update(
         {'UPassword': new_password}, 
         Query().UID == int(user_id)
     )
@@ -138,7 +138,7 @@ def update_user_acc():
     user_id = request.args.get('user_id')
     new_acc = request.args.get('new_acc')
         
-    success = users_table.update(
+    success = user_table.update(
         {'UAccount': new_acc}, 
         Query().UID == int(user_id)
     )
@@ -154,7 +154,7 @@ def update_user_nname():
     new_nname = request.args.get('new_nname')
 
     
-    success = users_table.update(
+    success = user_table.update(
         {'UNickName': new_nname}, 
         Query().UID == int(user_id)
     )
@@ -176,7 +176,7 @@ def update_user_isright():
     user_id = request.args.get('user_id')
     new_isright = request.args.get('new_isright')
         
-    success = users_table.update(
+    success = user_table.update(
         {'isrightHander': new_isright}, 
         Query().UID == int(user_id)
     )
@@ -191,7 +191,7 @@ def update_user_isdark():
     user_id = request.args.get('user_id')
     new_isdark = request.args.get('new_isdark')
 
-    success = users_table.update(
+    success = user_table.update(
         {'isDarkMode': new_isdark}, 
         Query().UID == int(user_id)
     )
@@ -206,7 +206,7 @@ def update_user_budget():
     user_id = request.args.get('user_id')
     new_budget = request.args.get('new_budget')
 
-    success = users_table.update(
+    success = user_table.update(
         {'BUDGET': new_budget}, 
         Query().UID == int(user_id)
     )
