@@ -51,7 +51,7 @@ def get_all_ledgers():
             f"""
                 SELECT LID, LName
                 FROM Ledgers
-                WHERE UID = {wallet_id};
+                WHERE WID = {wallet_id};
             """
         )
         result = cursor.fetchall()
@@ -97,87 +97,39 @@ def get_all_goals():
         cursor.close()
         abort(500, "ERROR 500")
 
-## if exists return goal id
-def check_data_to_goal(data_id):
 
-    cursor = db.connection.cursor()
+@home_page.route("/get_my_partner_goal", methods=["GET"])
+def get_my_partner_goal():
     try:
+        did= request.args.get("did")
+        cursor = db.connection.cursor()
         cursor.execute(
             f"""
                 SELECT GID
                 FROM DataToGoal
-                WHERE DID = {data_id};
+                WHERE DID = {did}
             """
         )
-        result = cursor.fetchone()
-        cursor.close()
-        if len(result) > 0:
-            return result[0]
-        else:
-            return False
+        gid = cursor.fetchall()
+        return jsonify(gid), 200
     except:
         cursor.execute("ROLLBACK")
-        cursor.close()
         abort(500, "ERROR 500")
 
-@home_page.route('/delete_data',methods=['DELETE', 'GET'])
-def delete_data():
-
-    data_id = request.args.get('data_id')
-    cursor = db.connection.cursor()
+@home_page.route("/get_my_partner_ledger", methods=["GET"])
+def get_my_partner_ledger():
     try:
-
-        # check if data exists in goal
-        # if exists update GCurrentAmount and delete from data
-        # else delete from data
-        if not check_data_to_goal(data_id):
-            cursor.execute(
-                f"""
-                    DELETE FROM Datas
-                    WHERE DID = {data_id};
-                """
-            )
-            cursor.execute("COMMIT")
-            cursor.close()
-            return "success"
-        else:
-            gid = check_data_to_goal(data_id)
-            cursor.execute(
-                f"""
-                    SELECT Price
-                    FROM Datas
-                    WHERE DID = {data_id};
-                """
-            )
-            price = cursor.fetchone() ## price of data
-            cursor.execute(
-                f"""
-                    SELECT GCurrentAmount
-                    FROM Goals
-                    WHERE GID = {gid};
-                """
-            )
-            current_amount = cursor.fetchone()
-            new_amount = int(current_amount[0]) - int(price[0])
-            cursor.execute(
-                f"""
-                    UPDATE Goals
-                    SET GCurrentAmount = {new_amount}
-                    WHERE GID = {gid};
-                """
-            )
-            cursor.execute(
-                f"""
-                    DELETE FROM Datas
-                    WHERE DID = {data_id};
-                """
-            )
-            cursor.execute("COMMIT")
-            cursor.close()
-            return "success"
-
+        did= request.args.get("did")
+        cursor = db.connection.cursor()
+        cursor.execute(
+            f"""
+                SELECT LID
+                FROM DataToLedger
+                WHERE DID = {did}
+            """
+        )
+        lid = cursor.fetchall()
+        return jsonify(lid), 200
     except:
         cursor.execute("ROLLBACK")
-        cursor.close()
         abort(500, "ERROR 500")
-

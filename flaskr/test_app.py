@@ -4,29 +4,31 @@ class TestCase:
     def __init__(self):
         self.base_url = 'http://localhost:5000'
 
-    def test_insert_user(self):
-        suffix = '/user/insert_acc_password?user_name=root&user_acc=root&user_password=root1234'
+    def test_get_all_wallets(self):
+        suffix = '/home_page/get_all_wallets?user_id=1'
         response = requests.get(self.base_url + suffix)
-        if response.status_code == 200 and response.data.decode() == 'success!':
-            print("Test insert user : passed")
-            return True
-        else:
-            print("Test insert user : failed")
-            return False
-    
-    """"
-    def test_get_user_id(self):
-        suffix = '/user/get_user_id?user_acc=root&user_password=root1234'
+        print(response.status_code)
+        print(response.json())  # 打印回應的JSON內容
+    def test_get_all_ledgers(self):
+        suffix = '/home_page/get_all_ledgers?wallet_id=1'
         response = requests.get(self.base_url + suffix)
-        if response.status_code == 200 and response.data.decode() == '1':
-            print("Test get user id : passed")
-            return True
-        else:
-            print("Test get user id : failed")
-            return False
-    """ 
-        
+        print(response.status_code)
+        print(response.json())
+    def test_get_all_goals(self):
+        suffix = '/home_page/get_all_goals?user_id=1'
+        response = requests.get(self.base_url + suffix)
+        print(response.status_code)
+        print(response.json())
+    def test_delete_data(self):
+        suffix = '/data/delete_data?data_id=1'
+        response = requests.delete(self.base_url + suffix)
+        print(response.status_code)
+        print(response.data.decode('utf-8'))
 
 def main():
     test = TestCase()
-    test.test_insert_user()
+    test.test_get_all_wallets()
+
+if __name__ == "__main__":
+    main()
+
