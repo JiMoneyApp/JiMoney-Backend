@@ -26,6 +26,29 @@ def check_ledger_name(user_id, ledger_name):
         cursor.close()
         abort(500, "ERROR 500")
 
+
+@ledger.route("/insert_ledger", methods=[ "GET", "PUT"])
+def insert_ledger():
+    user_id = request.args.get("user_id")
+    ledger_name = request.args.get("ledger_name")
+    cursor = db.connection.cursor()
+    if check_ledger_name(user_id, ledger_name):
+        return 'failed'
+    try:
+        cursor.execute(
+            f"""
+                INSERT INTO Ledgers (UID, LName)
+                VALUES ({user_id}, '{ledger_name}');
+            """
+        )
+        db.connection.commit()
+        cursor.close()
+        return 'success!'
+    except:
+        cursor.execute("ROLLBACK")
+        cursor.close()
+        abort(500, "ERROR 500")
+
 @ledger.route("/get_ledgers_name", methods=["GET"])
 def get_ledgers_name():
     user_id = request.args.get("user_id")
@@ -68,28 +91,6 @@ def get_ledgers_sum():
         abort(500, "ERROR 500")
 
 
-@ledger.route("/insert_ledger", methods=[ "GET", "PUT"])
-def insert_ledger():
-    user_id = request.args.get("user_id")
-    ledger_name = request.args.get("ledger_name")
-    cursor = db.connection.cursor()
-    if check_ledger_name(user_id, ledger_name):
-        return False
-    try:
-        cursor.execute(
-            f"""
-                INSERT INTO Ledgers (UID, LName)
-                VALUES ({user_id}, '{ledger_name}');
-            """
-        )
-        db.connection.commit()
-        cursor.close()
-        return True
-    except:
-        cursor.execute("ROLLBACK")
-        cursor.close()
-        abort(500, "ERROR 500")
-
 @ledger.route("/delete_ledger", methods=["DELETE", "GET"])
 def delete_ledger():
     user_id = request.args.get("user_id")
@@ -105,7 +106,7 @@ def delete_ledger():
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -130,7 +131,7 @@ def update_ledger():
         )
         db.connection.commit()
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         cursor.close()

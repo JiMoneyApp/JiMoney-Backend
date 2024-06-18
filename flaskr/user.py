@@ -10,6 +10,7 @@ from flask import (
     Flask
 )
 from database import db
+from datetime import datetime
 
 user = Blueprint("user",__name__)
 
@@ -419,7 +420,7 @@ def insert_user_acc_password():
     print(user_name)
     if check_account(user_acc):
         return 'account already exist!'
-    #print("{}, {}, {}".format(user_name, user_acc, user_password))
+    print("{}, {}, {}".format(user_name, user_acc, user_password))
     cursor = db.connection.cursor()
     try:
         #print("YESY")

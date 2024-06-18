@@ -47,8 +47,7 @@ def insert_new_data():
         
         cursor.execute(
             f"""
-                INSERT INTO Datas (UID, LName, Price, DName, DType, DDate)
-                VALUES ({user_id}, '{ledger_name}', {price}, '{data_name}', '{data_type}', '{data_date}');
+                INSERT INTO Datas (UID, LName, Price, DName, DType, DDate) VALUES ({user_id}, '{ledger_name}', {price}, '{data_name}', '{data_type}', {data_date});
             """
         )
         cursor.execute("COMMIT")
@@ -74,7 +73,7 @@ def insert_new_data():
         )
         cursor.execute("COMMIT")
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -93,7 +92,7 @@ def update_data_name():
             """
         )
         cursor.execute("COMMIT")
-        return True
+        return "success!"
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -113,8 +112,8 @@ def update_data_price():
                 WHERE DID = {data_id}
             """
         )
+        print(ledger_name)
         cursor.execute("COMMIT")
-        
         # Update ledger sum
         cursor.execute(
             f"""
@@ -126,6 +125,7 @@ def update_data_price():
         )
         result = cursor.fetchone()
         sum = int(result[0]) + int(price)
+        print(sum)
         cursor.execute(
             f"""
                 UPDATE Ledgers
@@ -136,7 +136,7 @@ def update_data_price():
         )
         cursor.execute("COMMIT")
         cursor.close()
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -155,7 +155,7 @@ def update_data_type():
             """
         )
         cursor.execute("COMMIT")
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -174,7 +174,7 @@ def update_data_date():
             """
         )
         cursor.execute("COMMIT")
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
@@ -191,7 +191,7 @@ def delete_data():
             """
         )
         cursor.execute("COMMIT")
-        return True
+        return 'success!'
     except:
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
