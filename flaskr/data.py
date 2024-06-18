@@ -47,7 +47,7 @@ def insert_new_data():
         
         cursor.execute(
             f"""
-                INSERT INTO Datas (UID, LName, Price, DName, DType, DDate) VALUES ({user_id}, '{ledger_name}', {price}, '{data_name}', '{data_type}', {data_date});
+                INSERT INTO Datas (UID, LName, Price, DName, DType, DDate) VALUES ({user_id}, '{ledger_name}', {price}, '{data_name}', '{data_type}', '{data_date}');
             """
         )
         cursor.execute("COMMIT")
