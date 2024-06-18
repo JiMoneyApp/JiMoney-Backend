@@ -28,7 +28,7 @@ CREATE TABLE Datas(
     Price INT DEFAULT 0 NOT NULL,
     DName VARCHAR(255) NOT NULL,
     DType VARCHAR(255) NOT NULL,
-    DDate DATE NOT NULL, -- Front-end should provide current date
+    DDate VARCHAR(255) NOT NULL, -- Front-end should provide current date
     PRIMARY KEY (DID)
 );
 
