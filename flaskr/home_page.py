@@ -35,7 +35,7 @@ def get_all_wallets():
                 "wname": wname
             })
         cursor.close()
-        return jsonify(wallets)
+        return jsonify(wallets),200
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -63,7 +63,7 @@ def get_all_ledgers():
                 "lname": lname
             })
         cursor.close()
-        return jsonify(ledgers)
+        return jsonify(ledgers),200
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -91,7 +91,7 @@ def get_all_goals():
                 "gname": gname
             })
         cursor.close()
-        return jsonify(goals)
+        return jsonify(goals),200
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -101,13 +101,13 @@ def get_all_goals():
 @home_page.route("/get_my_partner_goal", methods=["GET"])
 def get_my_partner_goal():
     try:
-        did= request.args.get("did")
+        data_id= request.args.get("data_id")
         cursor = db.connection.cursor()
         cursor.execute(
             f"""
                 SELECT GID
                 FROM DataToGoal
-                WHERE DID = {did}
+                WHERE DID = {data_id}
             """
         )
         gid = cursor.fetchall()
@@ -119,13 +119,13 @@ def get_my_partner_goal():
 @home_page.route("/get_my_partner_ledger", methods=["GET"])
 def get_my_partner_ledger():
     try:
-        did= request.args.get("did")
+        data_id= request.args.get("data_id")
         cursor = db.connection.cursor()
         cursor.execute(
             f"""
                 SELECT LID
                 FROM DataToLedger
-                WHERE DID = {did}
+                WHERE DID = {data_id}
             """
         )
         lid = cursor.fetchall()
