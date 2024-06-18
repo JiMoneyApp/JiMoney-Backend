@@ -19,7 +19,7 @@ def get_ledger_datas():
     datas = []
     for item in result:
         uid, lname, did, price, dname, dtype, ddate = item
-        ddate = ddate.strftime('%Y%m%d')
+        #ddate = ddate.strftime('%Y%m%d')
         datas.append({
             "uid": uid,
             "lname": lname,
@@ -32,7 +32,7 @@ def get_ledger_datas():
     cursor.close()
     return jsonify(datas)
 
-@data.route("/insert_new_data", methods=["GET", "POST"])
+@data.route("/insert_new_data", methods=["GET", "POST","PUT"])
 def insert_new_data():
     try: 
         # Insert new data
