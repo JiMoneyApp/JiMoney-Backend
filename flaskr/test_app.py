@@ -24,15 +24,14 @@ class TestCase:
 
     def test_get_my_partner_goal(self):
         suffix = '/home_page/get_my_partner_goal?data_id=1'
-        response = requests.delete(self.base_url + suffix)
+        response = requests.get(self.base_url + suffix)
         print(response.status_code)
-        print(response.data.decode('utf-8'))
-
-    def test_get_all_ledger_data(self):
+        print(response.json())
+    def test_get_my_partner_ledger(self):
         suffix = '/home_page/get_my_partner_ledger?data_id=1'
-        response = requests.delete(self.base_url + suffix)
+        response = requests.get(self.base_url + suffix)
         print(response.status_code)
-        print(response.data.decode('utf-8'))
+        print(response.json())
 
 def main():
     test = TestCase()
@@ -40,7 +39,7 @@ def main():
     test.test_get_all_ledgers()
     test.test_get_all_goals()
     test.test_get_my_partner_goal()
-    test.test_get_all_ledger_data()
+    test.test_get_my_partner_ledger()
 
 
 if __name__ == "__main__":
