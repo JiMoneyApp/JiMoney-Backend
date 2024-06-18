@@ -3,88 +3,58 @@ from database import db
 
 ledger = Blueprint("ledger", __name__)
 
-
-def check_ledger_name(user_id, ledger_name):
-    cursor = db.connect.cursor()
-    try:
-        cursor.execute(
-            f"""
-                SELECT *
-                FROM Ledgers
-                WHERE UID = {user_id}
-                AND Lname = '{ledger_name}';
-            """
-        )
-        result = cursor.fetchall()
-        cursor.close()
-        if len(result) > 0:
-            return True
-        else:
-            return False
-    except:
-        cursor.execute("ROLLBACK")
-        cursor.close()
-        abort(500, "ERROR 500")
-
-@ledger.route("/get_ledgers_name", methods=["GET"])
-def get_ledgers_name():
-    user_id = request.args.get("user_id")
+@ledger.route("/get_ledgers", methods=["GET"])
+def get_ledgers():
+    wallet_id = request.args.get("wallet_id")
+    if not wallet_id:
+        return jsonify({"error":"wallet_id not defined"}), 404
     cursor = db.connection.cursor()
-    try:
-        cursor.execute(
-            f"""
-                SELECT LName
-                FROM Ledgers
-                WHERE UID = {user_id};
-            """
+    cursor.execute(f"""SELECT * FROM Wallets WHERE WID = {wallet_id};""")
+    # Avoid non-exist wallet
+    if not cursor.fetchall():
+        return jsonify({"error":"wallet not exists"}), 404
+    
+    cursor.execute(f"""
+                   SELECT *
+                   FROM Ledgers
+                   WHERE WID = {wallet_id};
+                   """)
+    ledgers = cursor.fetchall()
+    result = []
+    for ledger in ledgers:
+        result.append(
+            {
+                "WID": ledger[0],
+                "LID": ledger[1],
+                "LName": ledger[2],
+            }
         )
-        result = cursor.fetchall()
-        cursor.close()
-        return jsonify(result)
-    except:
-        cursor.execute("ROLLBACK")
-        cursor.close()
-        abort(500, "ERROR 500")
-
-@ledger.route("/get_ledgers_sum", methods=["GET"])
-def get_ledgers_sum():
-    user_id = request.args.get("user_id")
-    ledger_name = request.args.get("ledger_name")
-    cursor = db.connection.cursor()
-    try:
-        cursor.execute(
-            f"""
-                SELECT LedgerSum
-                FROM Ledgers
-                WHERE UID = {user_id} AND LName = '{ledger_name}';
-            """
-        )
-        result = cursor.fetchall()
-        cursor.close()
-        return jsonify(result)
-    except:
-        cursor.execute("ROLLBACK")
-        cursor.close()
-        abort(500, "ERROR 500")
+    return jsonify(result), 200
 
 
-@ledger.route("/insert_ledger", methods=[ "GET", "PUT"])
+@ledger.route("/insert_ledger", methods=["GET", "POST"])
 def insert_ledger():
-    user_id = request.args.get("user_id")
+    wallet_id = request.args.get("wallet_id")
     ledger_name = request.args.get("ledger_name")
+    
+    if not wallet_id or not ledger_name:
+        return jsonify({"error":"wallet_id or ledger_name not defined"}), 404
     cursor = db.connection.cursor()
-    if check_ledger_name(user_id, ledger_name):
-        return False
+    cursor.execute(f"""SELECT * FROM Wallets WHERE WID = {wallet_id};""")
+    # Avoid non-exist wallet
+    if not cursor.fetchall():
+        return jsonify({"error":"wallet not exists"}), 404
+    
     try:
         cursor.execute(
             f"""
-                INSERT INTO Ledgers (UID, LName)
-                VALUES ({user_id}, '{ledger_name}');
+                INSERT INTO Ledgers (WID, LName)
+                VALUES ({wallet_id}, '{ledger_name}');
             """
         )
-        db.connection.commit()
+        cursor.execute("COMMIT")
         cursor.close()
-        return True
+        return jsonify({"success":"ledger inserted"}), 201
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -92,20 +62,32 @@ def insert_ledger():
 
 @ledger.route("/delete_ledger", methods=["DELETE", "GET"])
 def delete_ledger():
-    user_id = request.args.get("user_id")
-    ledger_name = request.args.get("ledger_name")
+    ledger_id = request.args.get("ledger_id")
     cursor = db.connection.cursor()
+    if not ledger_id:
+        return jsonify({"error":"ledger_id not defined"}), 404
+    cursor.execute(f"""SELECT * FROM Ledgers WHERE LID = {ledger_id};""")
+    if not cursor.fetchall():
+        return jsonify({"error":"ledger not exists, pass"}), 404
+    
     try:
         cursor.execute(
             f"""
                 DELETE FROM Ledgers
-                WHERE UID = {user_id}
-                AND Lname = '{ledger_name}';
+                WHERE LID = {ledger_id};
             """
         )
-        db.connection.commit()
+        cursor.execute("COMMIT")
+        cursor.execute(f"""
+                        SELECT * 
+                        FROM DataToLedger
+                        WHERE LID = {ledger_id};""")
+        if cursor.fetchall():
+            cursor.execute(f"""DELETE FROM DataToLedger WHERE LID = {ledger_id};""")
+            cursor.execute("COMMIT")
+        
         cursor.close()
-        return True
+        return jsonify({"success":"ledger deleted successfully"}), 200
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -113,25 +95,69 @@ def delete_ledger():
 
 @ledger.route("/update_ledger", methods=["PUT", "GET"])
 def update_ledger():
-    user_id = request.args.get("user_id")
-    old_ledger_name = request.args.get("old_ledger_name")
-    new_ledger_name = request.args.get("new_ledger_name")
-    if check_ledger_name(user_id, new_ledger_name):
-        return False
+    ledger_id = request.args.get("ledger_id")
     cursor = db.connection.cursor()
+    if not ledger_id:
+        return jsonify({"error":"ledger_id not defined"}), 404
+    cursor.execute(f"""
+                    SELECT * 
+                    FROM Ledgers 
+                    WHERE LID = {ledger_id};""")
+    if not cursor.fetchall():
+        return jsonify({"error":"ledger not exists, pass"}), 404
+    
     try:
-        cursor.execute(
-            f"""
-                UPDATE Ledgers
-                SET LName = '{new_ledger_name}'
-                WHERE UID = {user_id}
-                AND Lname = '{old_ledger_name}';
-            """
-        )
-        db.connection.commit()
+        new_data = {
+            'WID':request.args.get("wallet_id"),
+            'LName':request.args.get("ledger_name")
+        }
+        if not new_data['WID'] or not new_data['LName']:
+            return jsonify({"error":"wallet_id or ledger_name not defined"}), 404
+        cursor.execute(f"""SELECT * FROM Wallets WHERE WID = {new_data['WID']};""")
+        if not cursor.fetchall():
+            return jsonify({"error":"wallet not exists"}), 404
+        # Update Datas
+        update_fields = []
+        update_values = []
+        for key, value in new_data.items():
+            if value is not None:
+                update_fields.append(f"{key} = %s")
+                update_values.append(value) 
+            
+        if update_fields:
+            update_values.append(ledger_id)
+            update_query = f"UPDATE Ledgers SET {', '.join(update_fields)} WHERE LID = %s"
+            cursor.execute(update_query, tuple(update_values))
+            cursor.execute('COMMIT')
         cursor.close()
-        return True
+        return jsonify({"success":"ledger updated successfully"}), 201
+        
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
         abort(500, "ERROR 500")
+
+@ledger.route("/get_ledger_all_datas", methods=["GET"])
+def get_ledger_all_datas():
+    ledger_id = request.args.get("ledger_id")
+    cursor = db.connection.cursor()
+    if not ledger_id:
+        return jsonify({"error":"ledger_id not defined"}), 404
+    cursor.execute(f"""SELECT * FROM Ledgers WHERE LID = {ledger_id};""")
+    if not cursor.fetchall():
+        return jsonify({"error":"ledger not exists, pass"}), 404
+    
+    cursor.execute(f"""
+                   SELECT DID
+                   FROM DataToLedger
+                   WHERE LID = {ledger_id};
+                   """)
+    datas = cursor.fetchall()
+    result = []
+    for data in datas:
+        result.append(
+            {
+                "DID": data[0]
+            }
+        )
+    return jsonify(result), 200

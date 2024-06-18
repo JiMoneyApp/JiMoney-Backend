@@ -6,12 +6,12 @@ data = Blueprint("data", __name__, template_folder="flaskr")
 def insert_data():
     try:
         # Get user id
-        uid = request.args.get("user_id")
-        if not uid:
+        user_id = request.args.get("user_id")
+        if not user_id:
             return jsonify({'error': 'User id not defined'}), 404
         # Avoid insert data to non-exist user
         cursor = db.connection.cursor()
-        cursor.execute(f"SELECT * FROM Datas WHERE uid = {uid}")
+        cursor.execute(f"SELECT * FROM Datas WHERE UID = {user_id}")
         user_test = cursor.fetchone()
         if not user_test:
             return jsonify({'error': 'User not found'}), 404
@@ -30,7 +30,7 @@ def insert_data():
         cursor.execute(
             f"""
                 INSERT INTO Datas (UID, Price, DName, DType, DDate)
-                VALUES ({uid}, {price}, '{dname}', '{dtype}', {ddate});
+                VALUES ({user_id}, {price}, '{dname}', '{dtype}', {ddate});
             """
         )
         cursor.execute('COMMIT')
@@ -68,7 +68,7 @@ def insert_data():
 @data.route("update_data", methods=["GET", "POST"])
 def update_data():
     try: 
-        did = request.args.get("did")
+        data_id = request.args.get("data_id")
         # Get necessary data information
         new_data = {
             'price':request.args.get("price"),
@@ -82,7 +82,7 @@ def update_data():
     
         # Avoid update non-exist data
         cursor = db.connection.cursor()
-        cursor.execute(f"SELECT * FROM Datas WHERE did = {did}")
+        cursor.execute(f"SELECT * FROM Datas WHERE DID = {data_id}")
         original_data = cursor.fetchone()
         if not original_data:
             return jsonify({'error': 'Data not found'}), 404
@@ -92,7 +92,7 @@ def update_data():
             f"""
                 SELECT Price
                 FROM Datas
-                WHERE DID = {did}
+                WHERE DID = {data_id}
             """
         )
         original_price = cursor.fetchone()[0]
@@ -106,8 +106,8 @@ def update_data():
                 update_values.append(value) 
             
         if update_fields:
-            update_values.append(did)
-            update_query = f"UPDATE datas SET {', '.join(update_fields)} WHERE did = %s"
+            update_values.append(data_id)
+            update_query = f"UPDATE datas SET {', '.join(update_fields)} WHERE DID = %s"
             cursor.execute(update_query, tuple(update_values))
             cursor.execute('COMMIT')
         
@@ -116,13 +116,13 @@ def update_data():
             cursor.execute(
                 f"""
                     DELETE FROM DataToLedger
-                    WHERE DID = {did};
+                    WHERE DID = {data_id};
                 """
             )
             cursor.execute(
                 f"""
                     INSERT INTO DataToLedger (DID, LID)
-                    VALUES ({did}, {lid});
+                    VALUES ({data_id}, {lid});
                 """
             )   
             cursor.execute('COMMIT')
@@ -130,7 +130,7 @@ def update_data():
             cursor.execute(
                 f"""
                     DELETE FROM DataToLedger
-                    WHERE DID = {did};
+                    WHERE DID = {data_id};
                 """
             )
             cursor.execute('COMMIT')
@@ -142,14 +142,14 @@ def update_data():
                 f"""
                     UPDATE Goals
                     SET GCurrentAmount = GCurrentAmount - {original_price}
-                    WHERE GID = (SELECT GID FROM DataToGoal WHERE DID = {did});
+                    WHERE GID = (SELECT GID FROM DataToGoal WHERE DID = {data_id});
                 """
             )
             # Add new price to new Goal's GCurrentAmount
             cursor.execute(
                 f"""
                     UPDATE Goals
-                    SET GCurrentAmount = GCurrentAmount + (SELECT Price FROM Datas WHERE DID = {did})
+                    SET GCurrentAmount = GCurrentAmount + (SELECT Price FROM Datas WHERE DID = {data_id})
                     WHERE GID = {gid};
                 """
             )
@@ -157,13 +157,13 @@ def update_data():
             cursor.execute(
                 f"""
                     DELETE FROM DataToGoal
-                    WHERE DID = {did};
+                    WHERE DID = {data_id};
                 """
             )
             cursor.execute(
                 f"""
                     INSERT INTO DataToGoal (DID, GID)
-                    VALUES ({did}, {gid});
+                    VALUES ({data_id}, {gid});
                 """
             )   
             cursor.execute('COMMIT')
@@ -173,68 +173,33 @@ def update_data():
                 f"""
                     UPDATE Goals
                     SET GCurrentAmount = GCurrentAmount - {original_price}
-                    WHERE GID = (SELECT GID FROM DataToGoal WHERE DID = {did});
+                    WHERE GID = (SELECT GID FROM DataToGoal WHERE DID = {data_id});
                 """
             )
             cursor.execute(
                 f"""
                     DELETE FROM DataToGoal
-                    WHERE DID = {did};
+                    WHERE DID = {data_id};
                 """
             )
             cursor.execute('COMMIT')
         
         cursor.close()
-        return 'success', 201
+        return jsonify({"Success":"Update data successfully"}), 201
     except:
         cursor.execute('ROLLBACK')
         abort(500, 'ERROR 500')
         
-@data.route("/get_my_partner_goal", methods=["GET"])
-def get_my_partner_goal():
-    try:
-        did= request.args.get("did")
-        cursor = db.connection.cursor()
-        cursor.execute(
-            f"""
-                SELECT GID
-                FROM DataToGoal
-                WHERE DID = {did}
-            """
-        )
-        gid = cursor.fetchall()
-        return jsonify(gid), 200
-    except:
-        cursor.execute("ROLLBACK")
-        abort(500, "ERROR 500")
-
-@data.route("/get_my_partner_ledger", methods=["GET"])
-def get_my_partner_ledger():
-    try:
-        did= request.args.get("did")
-        cursor = db.connection.cursor()
-        cursor.execute(
-            f"""
-                SELECT LID
-                FROM DataToLedger
-                WHERE DID = {did}
-            """
-        )
-        lid = cursor.fetchall()
-        return jsonify(lid), 200
-    except:
-        cursor.execute("ROLLBACK")
-        abort(500, "ERROR 500")
         
 @data.route("/get_all_datas", methods=["GET"])
 def get_all_datas():
     try:
-        uid = request.args.get("uid")
-        if not uid:
+        user_id = request.args.get("user_id")
+        if not user_id:
             return jsonify({'error': 'User id not defined'}), 404
         # Avoid show non-exist user's data
         cursor = db.connection.cursor()
-        cursor.execute(f"SELECT * FROM Datas WHERE uid = {uid}")
+        cursor.execute(f"SELECT * FROM Datas WHERE UID = {user_id}")
         user_test = cursor.fetchone()
         if not user_test:
             return jsonify({'error': 'User not found'}), 404
@@ -249,8 +214,8 @@ def get_all_datas():
         result = []
         for data in datas:
             result.append({
-                'uid': data[0],
-                'did': data[1],
+                'UID': data[0],
+                'DID': data[1],
                 'price': data[2],
                 'dname': data[3],
                 'dtype': data[4],
@@ -259,4 +224,60 @@ def get_all_datas():
         return jsonify(result), 200
     except:
         cursor.execute("ROLLBACK")
+        abort(500, "ERROR 500")
+
+@data.route('/delete_data',methods=['DELETE', 'GET'])
+def delete_data():
+
+    data_id = request.args.get('data_id')
+    cursor = db.connection.cursor()
+    try:
+        cursor.execute(f"""
+                       SELECT GID
+                       FROM DataToGoal
+                       WHERE DID = {data_id};
+                       """)
+        corresponding_goal = cursor.fetchone()
+        if not corresponding_goal:
+            cursor.execute(
+                f"""
+                    DELETE FROM Datas
+                    WHERE DID = {data_id};
+                """
+            )
+            cursor.execute("COMMIT")
+            cursor.close()
+            return "success"
+        else:
+            gid = corresponding_goal[0]
+            cursor.execute(f"""
+                           UPDATE Goals
+                           SET GCurrentAmount = GCurrentAmount - (SELECT Price FROM Datas WHERE DID = {data_id})
+                           WHERE GID = {gid};""")
+            cursor.execute(
+                f"""
+                    DELETE FROM Datas
+                    WHERE DID = {data_id};
+                """
+            )
+            cursor.execute("COMMIT")
+        # If there exists any data-ledger relation, delete it
+        cursor.execute(f"""
+                       SELECT LID
+                       FROM DataToLedger
+                       WHERE DID = {data_id};
+                       """)
+        corresponding_ledger = cursor.fetchone()
+        if corresponding_ledger:
+            cursor.execute(f"""
+                           DELETE FROM DataToLedger
+                           WHERE DID = {data_id};
+                           """)
+            cursor.execute("COMMIT")
+        cursor.close()
+        return jsonify({"success":"data deleted successfully"}), 201
+
+    except:
+        cursor.execute("ROLLBACK")
+        cursor.close()
         abort(500, "ERROR 500")
