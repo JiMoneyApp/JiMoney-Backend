@@ -104,30 +104,3 @@ def update_wallet():
         cursor.close()
         abort(500, "ERROR 500")
 
-@wallet.route('/get_all_wallets',methods=['GET', 'POST'])
-def get_all_wallets():
-
-    user_id = request.args.get('user_id')
-    cursor = db.connection.cursor()
-    try:
-        cursor.execute(
-            f"""
-                SELECT WID, WName
-                FROM Wallets
-                WHERE UID = {user_id};
-            """
-        )
-        result = cursor.fetchall()
-        wallets = []
-        for item in result:
-            wid, wname = item
-            wallets.append({
-                "WID": wid,
-                "WNAME": wname
-            })
-        cursor.close()
-        return jsonify(wallets),200
-    except:
-        cursor.execute("ROLLBACK")
-        cursor.close()
-        abort(500, "ERROR 500")
