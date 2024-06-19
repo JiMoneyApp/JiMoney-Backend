@@ -3,6 +3,7 @@
 finished test:
     get_all_wallets()
     get_all_ledgers()
+    get_ledgers()
     get_all_goals()
     get_my_partner_goal()
     get_my_partner_ledger()
