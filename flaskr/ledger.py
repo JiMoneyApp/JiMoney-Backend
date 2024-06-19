@@ -160,3 +160,49 @@ def get_ledger_all_datas():
             }
         )
     return jsonify(result), 200
+
+@ledger.route("/get_my_partner_ledger", methods=["GET"])
+def get_my_partner_ledger():
+    try:
+        data_id= request.args.get("data_id")
+        cursor = db.connection.cursor()
+        cursor.execute(
+            f"""
+                SELECT LID
+                FROM DataToLedger
+                WHERE DID = {data_id}
+            """
+        )
+        lid = cursor.fetchall()
+        return jsonify(lid), 200
+    except:
+        cursor.execute("ROLLBACK")
+        abort(500, "ERROR 500")
+
+@ledger.route('/get_all_ledgers',methods=['GET', 'POST'])
+def get_all_ledgers():
+
+    wallet_id = request.args.get('wallet_id')
+    cursor = db.connection.cursor()
+    try:
+        cursor.execute(
+            f"""
+                SELECT LID, LName
+                FROM Ledgers
+                WHERE WID = {wallet_id};
+            """
+        )
+        result = cursor.fetchall()
+        ledgers = []
+        for item in result:
+            lid, lname = item
+            ledgers.append({
+                "lid": lid,
+                "lname": lname
+            })
+        cursor.close()
+        return jsonify(ledgers),200
+    except:
+        cursor.execute("ROLLBACK")
+        cursor.close()
+        abort(500, "ERROR 500")

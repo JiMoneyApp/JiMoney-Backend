@@ -5,6 +5,8 @@ from flask import Flask, jsonify, abort
 from data import data
 from user import user
 from ledger import ledger
+from wallet import wallet
+from goal import goal
 app = Flask(__name__)
 
 def initialize_app():
@@ -44,6 +46,8 @@ initialize_app() # Initialize the app with the current amount of each goal
 app.register_blueprint(user, url_prefix="/user")
 app.register_blueprint(ledger, url_prefix="/ledger")
 app.register_blueprint(data, url_prefix="/data")
+app.register_blueprint(wallet, url_prefix="/wallet")
+app.register_blueprint(goal, url_prefix="/goal")
 
 
 @app.route('/')
