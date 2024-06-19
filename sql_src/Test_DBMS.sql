@@ -1,30 +1,30 @@
-USE Money;
+USE DBMS;
 -- Insert Users
-INSERT INTO USERS (UName, UPassword, UAccount, NoticeTime)
+INSERT INTO Users (UName, UPassword, UAccount, NoticeTime)
 VALUES ('Mason', 'password', 'mason_account', 20021227);
-INSERT INTO USERS (UName, UPassword, UAccount, NoticeTime)
+INSERT INTO Users (UName, UPassword, UAccount, NoticeTime)
 VALUES ('Jeffery', 'password', 'jeffery_account', 20011108);
-INSERT INTO USERS (UName, UPassword, UAccount, NoticeTime)
+INSERT INTO Users (UName, UPassword, UAccount, NoticeTime)
 VALUES ('Eden', 'password', 'Eden_account', 20021027);
-INSERT INTO USERS (UName, UPassword, UAccount, NoticeTime)
+INSERT INTO Users (UName, UPassword, UAccount, NoticeTime)
 VALUES ('David', 'password', 'David_account', 20030712);
 
 -- Insert ledgers
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (1, 'mason_ledger_1');
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (1, 'mason_ledger_2');
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (2, 'jeffery_ledger_1');
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (2, 'jeffery_ledger_2');
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (3, 'eden_ledger_1');
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (3, 'eden_ledger_2');
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (4, 'david_ledger_1');
-INSERT INTO LEDGERS (UID, LName)
+INSERT INTO Ledgers (UID, LName)
 VALUES (4, 'david_ledger_2');
 
 -- Insert datas
