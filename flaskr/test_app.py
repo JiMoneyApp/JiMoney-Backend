@@ -10,8 +10,14 @@ class TestCase:
         print(response.status_code)
         print(response.json())  # 打印回應的JSON內容
 
-    def test_get_all_ledgers(self):
+    def test_get_ledgers(self):
         suffix = '/ledger/get_ledgers?wallet_id=1'
+        response = requests.get(self.base_url + suffix)
+        print(response.status_code)
+        print(response.json())
+
+    def test_get_all_ledgers(self):
+        suffix = '/ledger/get_all_ledgers?user_id=1'
         response = requests.get(self.base_url + suffix)
         print(response.status_code)
         print(response.json())
@@ -62,6 +68,7 @@ def main():
     test = TestCase()
     test.test_get_all_wallets()
     test.test_get_all_ledgers()
+    test.test_get_ledgers()
     test.test_get_all_goals()
     test.test_get_my_partner_goal()
     test.test_get_my_partner_ledger()

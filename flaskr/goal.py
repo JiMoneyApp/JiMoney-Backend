@@ -32,8 +32,8 @@ def get_all_goals():
         for item in result:
             gid, gname = item
             goals.append({
-                "gid": gid,
-                "gname": gname
+                "Gid": gid,
+                "GName": gname
             })
         cursor.close()
         return jsonify(goals),200

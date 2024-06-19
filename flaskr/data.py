@@ -217,10 +217,10 @@ def get_all_datas():
             result.append({
                 'UID': data[0],
                 'DID': data[1],
-                'price': data[2],
-                'dname': data[3],
-                'dtype': data[4],
-                'ddate': data[5]
+                'Price': data[2],
+                'DName': data[3],
+                'DType': data[4],
+                'DDate': data[5]
             })
         return jsonify(result), 200
     except:

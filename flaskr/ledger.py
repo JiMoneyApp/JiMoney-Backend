@@ -206,3 +206,42 @@ def get_wallet_all_ledger():
         cursor.execute("ROLLBACK")
         cursor.close()
         abort(500, "ERROR 500")
+
+
+@ledger.route('/get_all_ledgers',methods=['GET', 'POST'])
+def get_all_ledgers():
+
+    user_id = request.args.get('user_id')
+    cursor = db.connection.cursor()
+    try:
+        cursor.execute(
+            f"""
+                SELECT WID
+                FROM Wallets
+                WHERE UID = {user_id};
+            """
+        )
+        result = cursor.fetchall()
+        for item in result:
+            wid = item[0]
+            cursor.execute(
+                f"""
+                    SELECT LID, LName
+                    FROM Ledgers
+                    WHERE WID = {wid};
+                """
+            )
+            result = cursor.fetchall()
+            ledgers = []
+            for item in result:
+                lid, lname = item
+                ledgers.append({
+                    "LID": lid,
+                    "LName": lname
+                })
+            cursor.close()
+            return jsonify(ledgers),200
+    except:
+        cursor.execute("ROLLBACK")
+        cursor.close()
+        abort(500, "ERROR 500")
