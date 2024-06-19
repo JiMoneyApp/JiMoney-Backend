@@ -26,3 +26,7 @@ INSERT INTO Datas (UID, LName, Price, DName, DType, DDate) VALUES (2, 'Ledger3',
 INSERT INTO DataToGoal (DID, GID) VALUES (1, 1);
 INSERT INTO DataToGoal (DID, GID) VALUES (2, 1);
 INSERT INTO DataToGoal (DID, GID) VALUES (3, 2);
+
+INSERT INTO DataToLedger (DID, LID) VALUES (1, 1);
+INSERT INTO DataToLedger (DID, LID) VALUES (2, 1);
+INSERT INTO DataToLedger (DID, LID) VALUES (3, 3);
