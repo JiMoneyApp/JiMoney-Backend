@@ -56,7 +56,7 @@ def insert_wallet():
         )
         cursor.execute("COMMIT")
         cursor.close()
-        return "success",201
+        return jsonify({"message": "success"}), 201
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -76,7 +76,7 @@ def delete_wallet():
         )
         cursor.execute("COMMIT")
         cursor.close()
-        return "success",201
+        return jsonify({"message": "success"}), 201
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
@@ -98,7 +98,7 @@ def update_wallet():
         )
         cursor.execute("COMMIT")
         cursor.close()
-        return "success",201
+        return jsonify({"message": "success"}), 201
     except:
         cursor.execute("ROLLBACK")
         cursor.close()
