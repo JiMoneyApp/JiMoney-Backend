@@ -13,6 +13,7 @@ from database import db
 
 wallet = Blueprint("wallet",__name__)
 
+# for a given user_id, get all wallets including wid and wname
 @wallet.route('/get_all_wallets',methods=['GET', 'POST'])
 def get_all_wallets():
 
@@ -41,6 +42,7 @@ def get_all_wallets():
         cursor.close()
         abort(500, "ERROR 500")
 
+# for a given user id and wallet name, insert a new wallet
 @wallet.route('/insert_wallet',methods=['GET', 'POST', 'PUT'])
 def insert_wallet():
 
@@ -62,6 +64,7 @@ def insert_wallet():
         cursor.close()
         abort(500, "ERROR 500")
 
+# for a given wallet_id, delete a wallet
 @wallet.route('/delete_wallet',methods=['GET', 'POST', 'DELETE'])
 def delete_wallet():
 
@@ -82,6 +85,7 @@ def delete_wallet():
         cursor.close()
         abort(500, "ERROR 500")
 
+# for a given wallet_id, update wallet name
 @wallet.route('/update_wallet',methods=['GET', 'POST', 'PUT'])
 def update_wallet():
 

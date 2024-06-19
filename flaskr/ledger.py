@@ -3,6 +3,8 @@ from database import db
 
 ledger = Blueprint("ledger", __name__)
 
+# input wallet_id, get all ledgers of this wallet including lid and lname
+# notice : if you want get all ledger for a user not a wallet, you can use get_all_ledgers(last one in this file)
 @ledger.route("/get_ledgers", methods=["GET"])
 def get_ledgers():
     wallet_id = request.args.get("wallet_id")
@@ -31,6 +33,7 @@ def get_ledgers():
         )
     return jsonify(result), 200
 
+# for a given wallet_id, insert a new ledger of it 
 @ledger.route("/insert_ledger", methods=["GET", "POST"])
 def insert_ledger():
     wallet_id = request.args.get("wallet_id")
@@ -59,6 +62,7 @@ def insert_ledger():
         cursor.close()
         abort(500, "ERROR 500")
 
+# for a given ledger_id, delete ledger
 @ledger.route("/delete_ledger", methods=["DELETE", "GET"])
 def delete_ledger():
     ledger_id = request.args.get("ledger_id")
@@ -92,6 +96,7 @@ def delete_ledger():
         cursor.close()
         abort(500, "ERROR 500")
 
+# for a given ledger_id, update WID and LName of this ledger
 @ledger.route("/update_ledger", methods=["PUT", "GET"])
 def update_ledger():
     ledger_id = request.args.get("ledger_id")
@@ -136,6 +141,7 @@ def update_ledger():
         cursor.close()
         abort(500, "ERROR 500")
 
+# for a given ledger_id, get all datas of this ledger
 @ledger.route("/get_ledger_all_datas", methods=["GET"])
 def get_ledger_all_datas():
     ledger_id = request.args.get("ledger_id")
@@ -161,6 +167,7 @@ def get_ledger_all_datas():
         )
     return jsonify(result), 200
 
+# for a given data_id, get the owner ledger of this data
 @ledger.route("/get_my_partner_ledger", methods=["GET"])
 def get_my_partner_ledger():
     try:
@@ -179,6 +186,7 @@ def get_my_partner_ledger():
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
 
+# for a given wallet_id, get all ledgers of this wallet including lid and lname
 @ledger.route("/get_wallet_all_ledger", methods=["GET"])
 def get_wallet_all_ledger():
 
@@ -207,7 +215,7 @@ def get_wallet_all_ledger():
         cursor.close()
         abort(500, "ERROR 500")
 
-
+# for a given user_id, get all ledgers of this user including lid and lname
 @ledger.route('/get_all_ledgers',methods=['GET', 'POST'])
 def get_all_ledgers():
 

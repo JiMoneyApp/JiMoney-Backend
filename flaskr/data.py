@@ -3,6 +3,7 @@ from database import db
 
 data = Blueprint("data", __name__, template_folder="flaskr")
 
+# input user_id, insert data information, including price, dname, dtype, ddate, lid, gid
 @data.route("/insert_data", methods=["GET", "POST"])
 def insert_data():
     try:
@@ -66,6 +67,7 @@ def insert_data():
         cursor.execute('ROLLBACK')
         abort(500, 'ERROR 500')
 
+# for a given data_id update price, dname, dtype, ddate, lid, gid
 @data.route("update_data", methods=["GET", "POST"])
 def update_data():
     try: 
@@ -191,7 +193,7 @@ def update_data():
         cursor.execute('ROLLBACK')
         abort(500, 'ERROR 500')
         
-        
+# Get all data information for a given user_id        
 @data.route("/get_all_datas", methods=["GET"])
 def get_all_datas():
     try:
@@ -227,6 +229,7 @@ def get_all_datas():
         cursor.execute("ROLLBACK")
         abort(500, "ERROR 500")
 
+# for a given data_id, delete data 
 @data.route('/delete_data',methods=['DELETE', 'GET'])
 def delete_data():
 
