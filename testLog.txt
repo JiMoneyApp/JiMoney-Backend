@@ -1,0 +1,12 @@
+2024/06/19 jianmoa
+(其他測試是liao的)
+finished test:
+    get_all_wallets()
+    get_all_ledgers()
+    get_all_goals()
+    get_my_partner_goal()
+    get_my_partner_ledger()
+    insert_wallet()
+    delete_wallet()
+    update_wallet()
+    get_wallet_all_ledger()
