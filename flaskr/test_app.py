@@ -53,7 +53,7 @@ class TestCase:
         print(response.json())
 
     def test_get_wallet_all_ledger(self):
-        suffix = '/wallet/get_wallet_all_ledger?wallet_id=1'
+        suffix = '/ledger/get_wallet_all_ledger?wallet_id=1'
         response = requests.get(self.base_url + suffix)
         print(response.status_code)
         print(response.json())
