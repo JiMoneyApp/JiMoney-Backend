@@ -1,6 +1,6 @@
 
 -- Insert some data
-INSERT INTO Users (UName, UPassword, UAccount) VALUES ('a', 'a', 'a'); -- uid = 1
+INSERT INTO Users (UName, UPassword, UAccount) VALUES ('jianmao', 'jianmao0511', 'jianmao'); -- uid = 1
 INSERT INTO Users (UName, UPassword, UAccount) VALUES ('b', 'b', 'b'); -- uid = 2
 INSERT INTO Users (UName, UPassword, UAccount) VALUES ('c', 'c', 'c'); -- uid = 3
 
@@ -19,9 +19,9 @@ INSERT INTO Goals (UID, GName, GTargetAmount, GCurrentAmount, GDate) VALUES (1, 
 INSERT INTO Goals (UID, GName, GTargetAmount, GCurrentAmount, GDate) VALUES (2, 'Goal3', 300, 0, '2021-12-31'); -- gid = 3
 Insert INTO Goals (UID, GName, GTargetAmount, GCurrentAmount, GDate) VALUES (3, 'Goal4', 400, 0, '2021-12-31'); -- gid = 4
 
-INSERT INTO Datas (UID, LName, Price, DName, DType, DDate) VALUES (1, 'Ledger1', 100, 'Data1', 'Income', '2021-12-31'); -- did = 1
-INSERT INTO Datas (UID, LName, Price, DName, DType, DDate) VALUES (1, 'Ledger1', 200, 'Data2', 'Income', '2021-12-31'); -- did = 2
-INSERT INTO Datas (UID, LName, Price, DName, DType, DDate) VALUES (2, 'Ledger3', 400, 'Data3', 'Income', '2021-12-31'); -- did = 3
+INSERT INTO Datas (UID, Price, DName, DType, DDate) VALUES (1,  100, 'Data1', 'Income', '2021-12-31'); -- did = 1
+INSERT INTO Datas (UID, Price, DName, DType, DDate) VALUES (1,  200, 'Data2', 'Income', '2021-12-31'); -- did = 2
+INSERT INTO Datas (UID, Price, DName, DType, DDate) VALUES (2,  400, 'Data3', 'Income', '2021-12-31'); -- did = 3
 
 INSERT INTO DataToGoal (DID, GID) VALUES (1, 1);
 INSERT INTO DataToGoal (DID, GID) VALUES (2, 1);
